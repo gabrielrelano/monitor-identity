@@ -58,6 +58,30 @@ TARGETS = [
         "oidc_discovery": "https://identity-stage.teamsystem.com/.well-known/openid-configuration",
         "banner_api": None,
     },
+    # --- Paneles de identidad (Espana) ---------------------------------
+    # OJO: no se han podido verificar desde fuera. Si alguno solo es
+    # accesible desde la red interna o por VPN, el monitor lo dara por
+    # caido siempre, porque GitHub ejecuta desde internet publico. En ese
+    # caso, borra ese destino de la lista.
+    {
+        "name": "Identity Panel PROD (ES)",
+        "url": "https://identity-panel.teamsystem.es/",
+        "critical": True,
+        # Sin marcadores de contenido: no sabemos aun que sirve esta pagina.
+        # Cuando veas su HTML, pon aqui una palabra que siempre aparezca
+        # (un titulo, el nombre de un boton) para detectar paginas en blanco.
+        "expect_text": [],
+        "oidc_discovery": None,
+        "banner_api": None,
+    },
+    {
+        "name": "Identity Panel TEST (ES)",
+        "url": "https://identity-panel-test.teamsystem.es/",
+        "critical": False,
+        "expect_text": [],
+        "oidc_discovery": None,
+        "banner_api": None,
+    },
 ]
 
 # --- Deteccion de avisos de mantenimiento / tareas programadas -------------
@@ -96,7 +120,9 @@ MAINTENANCE_WINDOWS = [
         "desde": "2026-09-18T21:00:00+00:00",   # 23:00 CEST
         "hasta": "2026-09-18T22:00:00+00:00",   # 24:00 CEST
         "descripcion": "Mantenimiento programado de acceso a TeamSystem ID (anunciado en la web)",
-        "targets": ["Identity PROD", "Identity STAGE"],   # [] o ausente = todos
+        # Lista vacia = afecta a todos los destinos. Los paneles dependen del
+        # servicio de acceso, asi que tambien se ven afectados.
+        "targets": [],
         # Margen de cortesia antes y despues, en minutos: los mantenimientos
         # rara vez empiezan y acaban al minuto exacto.
         "margen_min": 15,
@@ -437,7 +463,9 @@ def check_login(target):
     if usuario and clave:
         return deep_login_check(target, usuario, clave)
 
-    return ok("login", "Formulario de login y metadatos OIDC correctos")
+    if disc:
+        return ok("login", "Formulario de login y metadatos OIDC correctos")
+    return ok("login", "Sin comprobacion funcional configurada para este destino")
 
 
 def deep_login_check(target, usuario, clave):
