@@ -5,10 +5,10 @@ name: Monitor Identity
 
 on:
   schedule:
-    # Cada 15 minutos. GitHub no es puntual al minuto: puede retrasarse
+    # Cada 5 minutos. GitHub no es puntual al minuto: puede retrasarse
     # unos minutos si hay cola. Para vigilancia critica al segundo hace
     # falta un servidor propio o un servicio de uptime de pago.
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
   # Permite lanzarlo a mano desde la pestana Actions con un boton
   workflow_dispatch:
 
