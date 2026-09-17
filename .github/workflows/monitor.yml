@@ -12,6 +12,10 @@ on:
   # Permite lanzarlo a mano desde la pestana Actions con un boton
   workflow_dispatch:
 
+# Necesario para que el workflow pueda guardar el fichero de estado
+permissions:
+  contents: write
+
 # Evita que se solapen dos ejecuciones si una se queda atascada
 concurrency:
   group: monitor-identity
@@ -24,23 +28,12 @@ jobs:
 
     steps:
       - name: Descargar el codigo del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Preparar Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-
-      # Recupera el fichero de estado de la ejecucion anterior, para que el
-      # monitor sepa si el fallo ya estaba avisado y no repita el mensaje
-      # cada 15 minutos.
-      - name: Recuperar el estado anterior
-        uses: actions/cache/restore@v4
-        with:
-          path: .identity_monitor_state.json
-          key: estado-monitor-${{ github.run_id }}
-          restore-keys: |
-            estado-monitor-
 
       - name: Ejecutar el monitor
         env:
@@ -48,11 +41,22 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           # Descomenta la linea siguiente si ademas quieres avisos en Teams
           # TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-        run: python monitor_identity.py -test-alert
+        run: python monitor_identity.py --exit-zero
 
+      # Guarda la memoria del monitor como un fichero del repositorio.
+      # Solo crea un commit cuando el estado cambia de verdad (una caida,
+      # una recuperacion): si todo sigue igual, no toca nada.
       - name: Guardar el estado para la proxima vez
         if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: .identity_monitor_state.json
-          key: estado-monitor-${{ github.run_id }}
+        run: |
+          if [ -n "$(git status --porcelain .identity_monitor_state.json)" ]; then
+            git config user.name "monitor-identity"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .identity_monitor_state.json
+            git commit -m "Estado del monitor actualizado [skip ci]"
+            git pull --rebase --autostash origin ${{ github.ref_name }} || true
+            git push
+            echo "Estado guardado."
+          else
+            echo "Sin cambios de estado, no hay nada que guardar."
+          fi
