@@ -48,7 +48,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           # Descomenta la linea siguiente si ademas quieres avisos en Teams
           # TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-        run: python monitor_identity.py --exit-zero
+        run: python monitor_identity.py -test-alert
 
       - name: Guardar el estado para la proxima vez
         if: always()
