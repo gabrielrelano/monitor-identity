@@ -1,0 +1,58 @@
+# Monitor de TeamSystem Identity con avisos por Telegram.
+# Este fichero va en tu repositorio en la ruta: .github/workflows/monitor.yml
+
+name: Monitor Identity
+
+on:
+  schedule:
+    # Cada 15 minutos. GitHub no es puntual al minuto: puede retrasarse
+    # unos minutos si hay cola. Para vigilancia critica al segundo hace
+    # falta un servidor propio o un servicio de uptime de pago.
+    - cron: "*/15 * * * *"
+  # Permite lanzarlo a mano desde la pestana Actions con un boton
+  workflow_dispatch:
+
+# Evita que se solapen dos ejecuciones si una se queda atascada
+concurrency:
+  group: monitor-identity
+  cancel-in-progress: false
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Recupera el fichero de estado de la ejecucion anterior, para que el
+      # monitor sepa si el fallo ya estaba avisado y no repita el mensaje
+      # cada 15 minutos.
+      - name: Recuperar el estado anterior
+        uses: actions/cache/restore@v4
+        with:
+          path: .identity_monitor_state.json
+          key: estado-monitor-${{ github.run_id }}
+          restore-keys: |
+            estado-monitor-
+
+      - name: Ejecutar el monitor
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Descomenta la linea siguiente si ademas quieres avisos en Teams
+          # TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: python monitor_identity.py --exit-zero
+
+      - name: Guardar el estado para la proxima vez
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .identity_monitor_state.json
+          key: estado-monitor-${{ github.run_id }}
