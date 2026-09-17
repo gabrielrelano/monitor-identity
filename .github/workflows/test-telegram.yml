@@ -1,0 +1,35 @@
+# Prueba de notificaciones por Telegram.
+# Este fichero va en tu repositorio en la ruta: .github/workflows/test-telegram.yml
+#
+# No se ejecuta solo: solo cuando pulsas "Run workflow" en la pestana Actions.
+
+name: Probar aviso de Telegram
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v5
+
+      - name: Preparar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Enviar mensaje de prueba
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python monitor_identity.py --test-alert
+
+      - name: Comprobacion completa de los dos entornos
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python monitor_identity.py --always-notify --exit-zero
