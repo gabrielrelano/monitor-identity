@@ -1,8 +1,8 @@
 {
   "Identity PROD": {
     "status": "WARN",
-    "last_alert_ts": 1790113024.4892654,
-    "since": "2026-09-22T21:37:04.489269+00:00"
+    "last_alert_ts": 1790120837.8864708,
+    "since": "2026-09-22T23:47:17.886474+00:00"
   },
   "Identity STAGE": {
     "status": "OK",
@@ -16,7 +16,7 @@
   },
   "Identity Panel TEST (ES)": {
     "status": "NOTICE",
-    "last_alert_ts": 1790113031.112728,
-    "since": "2026-09-22T21:37:11.112730+00:00"
+    "last_alert_ts": 1790120844.8585544,
+    "since": "2026-09-22T23:47:24.858557+00:00"
   }
 }
