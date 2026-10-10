@@ -10,13 +10,13 @@
     "since": "2026-10-10T01:19:24.102278+00:00"
   },
   "Identity Panel PROD (ES)": {
-    "status": "NOTICE",
-    "last_alert_ts": 1791616564.3354037,
-    "since": "2026-10-10T07:16:04.335405+00:00"
+    "status": "WARN",
+    "last_alert_ts": 1791640011.8479548,
+    "since": "2026-10-10T13:46:51.847958+00:00"
   },
   "Identity Panel TEST (ES)": {
     "status": "NOTICE",
-    "last_alert_ts": 1791616565.5492084,
-    "since": "2026-10-10T07:16:05.549210+00:00"
+    "last_alert_ts": 1791640013.6660051,
+    "since": "2026-10-10T13:46:53.666008+00:00"
   }
 }
