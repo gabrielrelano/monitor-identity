@@ -11,12 +11,12 @@
   },
   "Identity Panel PROD (ES)": {
     "status": "NOTICE",
-    "last_alert_ts": 1791722303.8209898,
-    "since": "2026-10-11T12:38:23.820993+00:00"
+    "last_alert_ts": 1791740792.798196,
+    "since": "2026-10-11T17:46:32.798199+00:00"
   },
   "Identity Panel TEST (ES)": {
     "status": "NOTICE",
-    "last_alert_ts": 1791722305.0660899,
-    "since": "2026-10-11T12:38:25.066093+00:00"
+    "last_alert_ts": 1791740794.5225062,
+    "since": "2026-10-11T17:46:34.522509+00:00"
   }
 }
