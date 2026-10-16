@@ -1,8 +1,8 @@
 {
   "Identity PROD": {
-    "status": "WARN",
-    "last_alert_ts": 1792169221.1547866,
-    "since": "2026-10-16T16:47:01.154791+00:00"
+    "status": "FAIL",
+    "last_alert_ts": 1792179809.9798906,
+    "since": "2026-10-16T19:43:29.979894+00:00"
   },
   "Identity STAGE": {
     "status": "OK",
@@ -10,13 +10,13 @@
     "since": "2026-10-15T18:43:00.318044+00:00"
   },
   "Identity Panel PROD (ES)": {
-    "status": "NOTICE",
-    "last_alert_ts": 1792169224.8310456,
-    "since": "2026-10-16T16:47:04.831049+00:00"
+    "status": "WARN",
+    "last_alert_ts": 1792179818.1800988,
+    "since": "2026-10-16T19:43:38.180102+00:00"
   },
   "Identity Panel TEST (ES)": {
     "status": "NOTICE",
-    "last_alert_ts": 1792169226.2869844,
-    "since": "2026-10-16T16:47:06.286987+00:00"
+    "last_alert_ts": 1792179820.0493376,
+    "since": "2026-10-16T19:43:40.049341+00:00"
   }
 }
